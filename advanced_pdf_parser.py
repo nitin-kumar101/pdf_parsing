@@ -2,7 +2,105 @@
 Advanced PDF Parser with Intelligent Section-Based Chunking
 Uses multiple advanced libraries for robust PDF parsing and semantic chunking.
 """
+"""
 
+import fitz  # PyMuPDF
+import math
+
+def polygon_area(points):
+    """
+    Compute the area of a polygon given as a list of (x,y) points.
+    Assumes the polygon is closed (first point = last point) or we wrap around.
+    """
+    area = 0.0
+    n = len(points)
+    if n < 3:
+        return 0.0
+    for i in range(n):
+        x0, y0 = points[i]
+        x1, y1 = points[(i + 1) % n]
+        area += x0 * y1 - x1 * y0
+    return abs(area) * 0.5
+
+def compute_path_area(path):
+    """
+    Given a path dictionary from page.get_drawings(), 
+    estimate its area if it's a closed shape.
+    Returns (area, reason) or (None, reason) if cannot compute.
+    """
+    items = path.get("items", [])
+    bbox = path.get("rect", None)
+    close = path.get("closePath", False)
+
+    # 1. Handle simple rectangle item 're'
+    for item in items:
+        if item[0] == "re":
+            # item = ('re', Rect(x0,y0,x1,y1), orientation)
+            rect = item[1]
+            try:
+                x0, y0, x1, y1 = rect.x0, rect.y0, rect.x1, rect.y1
+            except AttributeError:
+                x0, y0, x1, y1 = rect
+            width = abs(x1 - x0)
+            height = abs(y1 - y0)
+            area = width * height
+            return area, f"rectangle item width={width:.2f} height={height:.2f}"
+
+    # 2. Handle general polygon (lines + curves) if closed
+    if close:
+        # Collect points from line segments ('l') only (curve approximate omitted)
+        pts = []
+        for item in items:
+            if item[0] == "l":
+                p1, p2 = item[1], item[2]
+                try:
+                    pts.append((p1.x, p1.y))
+                except AttributeError:
+                    pts.append((p1[0], p1[1]))
+                # we could also append p2 but will wrap around
+        if len(pts) >= 3:
+            # ensure closure by adding first point at end if not same
+            if pts[0] != pts[-1]:
+                pts.append(pts[0])
+            area = polygon_area(pts)
+            return area, f"polygon approx with {len(pts)-1} sides"
+    
+    # 3. Fallback: use bounding box as approximation
+    if bbox is not None:
+        try:
+            x0, y0, x1, y1 = bbox.x0, bbox.y0, bbox.x1, bbox.y1
+        except AttributeError:
+            x0, y0, x1, y1 = bbox
+        width = abs(x1 - x0)
+        height = abs(y1 - y0)
+        area = width * height
+        return area, "bounding‐box approximate"
+
+    return None, "could not compute area"
+
+def analyze_pdf(file_path, min_area_threshold=10000.0):
+    """
+    Analyze each page of the PDF for closed shapes with area above min_area_threshold.
+    Prints page number, path index, area, and reason.
+    """
+    doc = fitz.open(file_path)
+    for page_number in range(len(doc)):
+        page = doc[page_number]
+        paths = page.get_drawings()
+        print(f"\nPage {page_number + 1}/{len(doc)}: {len(paths)} path(s) found")
+        for idx, path in enumerate(paths):
+            area, reason = compute_path_area(path)
+            if area is not None and area > min_area_threshold:
+                print(f"  Path #{idx}: area ≈ {area:.2f} — {reason}")
+    doc.close()
+
+if __name__ == "__main__":
+    pdf_file = "your_file.pdf"  # replace with your PDF filename
+    analyze_pdf(pdf_file, min_area_threshold=50000.0)
+
+
+
+"""
 import fitz  # PyMuPDF
 import pdfplumber
 from typing import List, Dict, Tuple, Optional
