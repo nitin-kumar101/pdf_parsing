@@ -7,3 +7,80 @@ langchain-community>=0.0.20
 numpy>=1.24.0
 python-docx>=1.0.0
 pillow>=10.0.0
+
+# Requirements (some example libs)
+import fitz  # PyMuPDF
+import cv2
+import numpy as np
+import networkx as nx
+from circuit_schematic_image_interpreter import Interpreter  # from CircuitSchematicImageInterpreter
+# (or your own segmentation + OCR pipeline)
+from sentence_transformers import SentenceTransformer
+import faiss
+import pickle
+
+class CircuitRAG:
+    def __init__(self, embedding_model_name='all-MiniLM-L6-v2'):
+        self.embedding_model = SentenceTransformer(embedding_model_name)
+        self.db = None  # will store (embeddings, metadata)
+        self.graphs = {}  # map pdf_page_id -> graph of components
+    
+    def ingest_pdf(self, pdf_path):
+        doc = fitz.open(pdf_path)
+        for page_no in range(len(doc)):
+            page = doc[page_no]
+            pix = page.get_pixmap(dpi=300)  # high res
+            img = np.frombuffer(pix.samples, dtype=np.uint8).reshape(pix.height, pix.width, pix.n)
+            # run diagram interpreter
+            interp = Interpreter(config={})  # default or custom config
+            result = interp.process_image(img)  # this gives components, wires, junctions, graphs, OCR labels, bboxes
+            G = result['graph']  # networkx graph: nodes have attributes: 'type','label','bbox', etc.
+            self.graphs[(pdf_path, page_no)] = {'graph': G, 'image': img}
+            # For each component create index item
+            for node_id, data in G.nodes(data=True):
+                label = data.get('label', '') or data.get('type', '')
+                emb = self.embedding_model.encode(label)
+                item = {
+                    'pdf': pdf_path,
+                    'page': page_no,
+                    'node_id': node_id,
+                    'label': label,
+                }
+                if self.db is None:
+                    self.embeddings = emb[np.newaxis, :]
+                    self.metadata = [item]
+                else:
+                    self.embeddings = np.vstack([self.embeddings, emb])
+                    self.metadata.append(item)
+        # build FAISS index
+        dim = self.embeddings.shape[1]
+        index = faiss.IndexFlatL2(dim)
+        index.add(self.embeddings)
+        self.db = {'index': index, 'metadata': self.metadata}
+    
+    def query(self, component_name, top_k=5, include_neighbors=True):
+        q_emb = self.embedding_model.encode(component_name)
+        D, I = self.db['index'].search(q_emb[np.newaxis, :], top_k)
+        results = []
+        for idx in I[0]:
+            meta = self.db['metadata'][idx]
+            pdf, page = meta['pdf'], meta['page']
+            node_id = meta['node_id']
+            graph_info = self.graphs[(pdf, page)]
+            G = graph_info['graph']
+            img = graph_info['image']
+            # Get bbox for the component
+            bbox = G.nodes[node_id].get('bbox')
+            sub_images = []
+            if bbox is not None:
+                x0, y0, x1, y1 = bbox  # adjust depending on format
+                sub_img = img[y0:y1, x0:x1]
+                sub_images.append(sub_img)
+            if include_neighbors:
+                for nbr in G.neighbors(node_id):
+                    bbox2 = G.nodes[nbr].get('bbox')
+                    if bbox2:
+                        x0, y0, x1, y1 = bbox2
+                        sub_images.append(img[y0:y1, x0:x1])
+            results.append({'metadata': meta, 'sub_images': sub_images})
+        return results
