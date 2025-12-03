@@ -84,3 +84,565 @@ class CircuitRAG:
                         sub_images.append(img[y0:y1, x0:x1])
             results.append({'metadata': meta, 'sub_images': sub_images})
         return results
+
+"""
+Circuit Diagram PDF Processing using OpenCV and Multimodal LLM
+Extracts circuit diagrams, uses vision models to analyze, and creates graph JSON structures
+"""
+
+import json
+import base64
+import cv2
+import numpy as np
+from typing import List, Dict, Any, Tuple, Optional
+from dataclasses import dataclass, asdict
+from pathlib import Path
+import fitz  # PyMuPDF
+from PIL import Image
+import io
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import anthropic  # or use OpenAI's GPT-4 Vision
+
+
+@dataclass
+class Component:
+    """Represents a circuit component"""
+    id: str
+    type: str
+    value: str
+    position: Dict[str, float]  # {x, y, width, height}
+    pins: List[Dict[str, Any]]
+    properties: Dict[str, Any]
+
+
+@dataclass
+class Connection:
+    """Represents a connection between components"""
+    id: str
+    from_component: str
+    to_component: str
+    from_pin: str
+    to_pin: str
+    wire_path: List[Dict[str, float]]  # List of {x, y} coordinates
+    net_name: str = ""
+
+
+@dataclass
+class CircuitGraph:
+    """Represents a complete circuit as a graph"""
+    circuit_id: str
+    page_number: int
+    image_path: str
+    bounding_box: Dict[str, float]
+    components: List[Component]
+    connections: List[Connection]
+    metadata: Dict[str, Any]
+    
+    def to_dict(self):
+        return {
+            'circuit_id': self.circuit_id,
+            'page_number': self.page_number,
+            'image_path': self.image_path,
+            'bounding_box': self.bounding_box,
+            'components': [asdict(c) for c in self.components],
+            'connections': [asdict(c) for c in self.connections],
+            'metadata': self.metadata
+        }
+    
+    def to_text_chunk(self) -> str:
+        """Convert circuit graph to searchable text chunk"""
+        text_parts = [
+            f"Circuit {self.circuit_id} on Page {self.page_number}",
+            f"Location: {self.metadata.get('description', '')}"
+        ]
+        
+        # Component descriptions
+        comp_summary = {}
+        for comp in self.components:
+            comp_type = comp.type
+            comp_summary[comp_type] = comp_summary.get(comp_type, 0) + 1
+            comp_text = f"{comp.type} {comp.id}"
+            if comp.value:
+                comp_text += f" value={comp.value}"
+            if comp.properties:
+                props = " ".join([f"{k}={v}" for k, v in comp.properties.items()])
+                comp_text += f" {props}"
+            text_parts.append(comp_text)
+        
+        # Summary
+        summary = ", ".join([f"{count} {ctype}(s)" for ctype, count in comp_summary.items()])
+        text_parts.insert(1, f"Contains: {summary}")
+        
+        # Connection descriptions
+        for conn in self.connections:
+            conn_text = f"Wire {conn.id}: {conn.from_component}.{conn.from_pin} -> {conn.to_component}.{conn.to_pin}"
+            if conn.net_name:
+                conn_text += f" (net: {conn.net_name})"
+            text_parts.append(conn_text)
+        
+        return " | ".join(text_parts)
+
+
+class CircuitImageExtractor:
+    """Extracts circuit diagram images from PDF pages using OpenCV"""
+    
+    def __init__(self, output_dir: str = "extracted_circuits"):
+        self.output_dir = Path(output_dir)
+        self.output_dir.mkdir(exist_ok=True)
+    
+    def extract_page_as_image(self, page: fitz.Page, page_num: int, dpi: int = 300) -> np.ndarray:
+        """Convert PDF page to high-resolution image"""
+        mat = fitz.Matrix(dpi / 72, dpi / 72)
+        pix = page.get_pixmap(matrix=mat)
+        img_data = pix.tobytes("png")
+        
+        # Convert to OpenCV format
+        nparr = np.frombuffer(img_data, np.uint8)
+        img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+        return img
+    
+    def detect_circuit_regions(self, img: np.ndarray) -> List[Tuple[int, int, int, int]]:
+        """Detect rectangular regions containing circuit diagrams"""
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        
+        # Apply adaptive thresholding
+        thresh = cv2.adaptiveThreshold(
+            gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
+            cv2.THRESH_BINARY_INV, 11, 2
+        )
+        
+        # Morphological operations to connect components
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
+        dilated = cv2.dilate(thresh, kernel, iterations=3)
+        
+        # Find contours
+        contours, _ = cv2.findContours(dilated, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        
+        # Filter contours by size and aspect ratio
+        regions = []
+        img_area = img.shape[0] * img.shape[1]
+        
+        for contour in contours:
+            x, y, w, h = cv2.boundingRect(contour)
+            area = w * h
+            
+            # Filter: reasonable size, not too small, not the entire page
+            if area > img_area * 0.05 and area < img_area * 0.9 and w > 100 and h > 100:
+                aspect_ratio = w / h
+                if 0.3 < aspect_ratio < 3.0:  # Reasonable aspect ratio
+                    regions.append((x, y, w, h))
+        
+        # Merge overlapping regions
+        regions = self._merge_overlapping_regions(regions)
+        return regions
+    
+    def _merge_overlapping_regions(self, regions: List[Tuple], overlap_threshold: float = 0.5) -> List[Tuple]:
+        """Merge overlapping bounding boxes"""
+        if not regions:
+            return []
+        
+        regions = sorted(regions, key=lambda r: r[0])
+        merged = [regions[0]]
+        
+        for current in regions[1:]:
+            last = merged[-1]
+            
+            # Check for overlap
+            x_overlap = max(0, min(last[0] + last[2], current[0] + current[2]) - max(last[0], current[0]))
+            y_overlap = max(0, min(last[1] + last[3], current[1] + current[3]) - max(last[1], current[1]))
+            
+            overlap_area = x_overlap * y_overlap
+            min_area = min(last[2] * last[3], current[2] * current[3])
+            
+            if overlap_area / min_area > overlap_threshold:
+                # Merge
+                x = min(last[0], current[0])
+                y = min(last[1], current[1])
+                w = max(last[0] + last[2], current[0] + current[2]) - x
+                h = max(last[1] + last[3], current[1] + current[3]) - y
+                merged[-1] = (x, y, w, h)
+            else:
+                merged.append(current)
+        
+        return merged
+    
+    def extract_circuit_images(self, pdf_path: str) -> List[Dict[str, Any]]:
+        """Extract all circuit images from PDF"""
+        doc = fitz.open(pdf_path)
+        extracted_circuits = []
+        
+        for page_num in range(len(doc)):
+            page = doc[page_num]
+            img = self.extract_page_as_image(page, page_num)
+            
+            # Detect circuit regions
+            regions = self.detect_circuit_regions(img)
+            
+            for idx, (x, y, w, h) in enumerate(regions):
+                # Add padding
+                padding = 20
+                x_pad = max(0, x - padding)
+                y_pad = max(0, y - padding)
+                w_pad = min(img.shape[1] - x_pad, w + 2 * padding)
+                h_pad = min(img.shape[0] - y_pad, h + 2 * padding)
+                
+                # Extract region
+                circuit_img = img[y_pad:y_pad+h_pad, x_pad:x_pad+w_pad]
+                
+                # Save image
+                circuit_id = f"page{page_num+1}_circuit{idx+1}"
+                img_path = self.output_dir / f"{circuit_id}.png"
+                cv2.imwrite(str(img_path), circuit_img)
+                
+                extracted_circuits.append({
+                    'circuit_id': circuit_id,
+                    'page_number': page_num + 1,
+                    'image_path': str(img_path),
+                    'bounding_box': {'x': x_pad, 'y': y_pad, 'width': w_pad, 'height': h_pad},
+                    'image': circuit_img
+                })
+        
+        doc.close()
+        return extracted_circuits
+
+
+class MultimodalCircuitAnalyzer:
+    """Uses multimodal LLM to analyze circuit diagrams and extract graph structure"""
+    
+    def __init__(self, api_key: str, model: str = "claude-3-5-sonnet-20241022"):
+        self.client = anthropic.Anthropic(api_key=api_key)
+        self.model = model
+    
+    def image_to_base64(self, image: np.ndarray) -> str:
+        """Convert OpenCV image to base64 string"""
+        _, buffer = cv2.imencode('.png', image)
+        return base64.b64encode(buffer).decode('utf-8')
+    
+    def analyze_circuit_image(self, image: np.ndarray, circuit_id: str) -> Dict[str, Any]:
+        """Analyze circuit image using multimodal LLM"""
+        img_base64 = self.image_to_base64(image)
+        
+        prompt = """Analyze this circuit diagram and extract detailed information in JSON format.
+
+Please identify:
+1. All components (resistors, capacitors, inductors, transistors, ICs, diodes, voltage sources, etc.)
+2. Component values and labels (e.g., R1=10kΩ, C1=100μF)
+3. Connections/wires between components
+4. Pin numbers or connection points
+5. Net names if labeled (VCC, GND, etc.)
+
+Return ONLY a valid JSON object with this structure:
+{
+  "components": [
+    {
+      "id": "R1",
+      "type": "resistor",
+      "value": "10kΩ",
+      "position": {"x": 100, "y": 150, "width": 50, "height": 20},
+      "pins": [{"pin_id": "1", "position": {"x": 100, "y": 160}}, {"pin_id": "2", "position": {"x": 150, "y": 160}}],
+      "properties": {"power_rating": "0.25W"}
+    }
+  ],
+  "connections": [
+    {
+      "id": "wire1",
+      "from_component": "R1",
+      "to_component": "C1",
+      "from_pin": "2",
+      "to_pin": "1",
+      "wire_path": [{"x": 150, "y": 160}, {"x": 200, "y": 160}],
+      "net_name": "signal"
+    }
+  ],
+  "metadata": {
+    "description": "Simple RC filter circuit",
+    "power_supply": "5V",
+    "ground_connections": ["C1.pin2"]
+  }
+}
+
+Be as detailed and accurate as possible. If you cannot determine exact positions, estimate them based on the visual layout."""
+
+        try:
+            message = self.client.messages.create(
+                model=self.model,
+                max_tokens=4096,
+                messages=[
+                    {
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "image",
+                                "source": {
+                                    "type": "base64",
+                                    "media_type": "image/png",
+                                    "data": img_base64
+                                }
+                            },
+                            {
+                                "type": "text",
+                                "text": prompt
+                            }
+                        ]
+                    }
+                ]
+            )
+            
+            # Extract JSON from response
+            response_text = message.content[0].text
+            
+            # Try to extract JSON from markdown code blocks
+            if "```json" in response_text:
+                json_str = response_text.split("```json")[1].split("```")[0].strip()
+            elif "```" in response_text:
+                json_str = response_text.split("```")[1].split("```")[0].strip()
+            else:
+                json_str = response_text.strip()
+            
+            circuit_data = json.loads(json_str)
+            return circuit_data
+            
+        except Exception as e:
+            print(f"Error analyzing circuit {circuit_id}: {e}")
+            return {"components": [], "connections": [], "metadata": {"error": str(e)}}
+    
+    def create_circuit_graph(self, circuit_info: Dict, circuit_id: str, 
+                           page_number: int, image_path: str, 
+                           bounding_box: Dict) -> CircuitGraph:
+        """Convert LLM analysis to CircuitGraph object"""
+        
+        components = [
+            Component(
+                id=comp['id'],
+                type=comp['type'],
+                value=comp.get('value', ''),
+                position=comp.get('position', {}),
+                pins=comp.get('pins', []),
+                properties=comp.get('properties', {})
+            )
+            for comp in circuit_info.get('components', [])
+        ]
+        
+        connections = [
+            Connection(
+                id=conn.get('id', f"conn_{i}"),
+                from_component=conn['from_component'],
+                to_component=conn['to_component'],
+                from_pin=conn.get('from_pin', ''),
+                to_pin=conn.get('to_pin', ''),
+                wire_path=conn.get('wire_path', []),
+                net_name=conn.get('net_name', '')
+            )
+            for i, conn in enumerate(circuit_info.get('connections', []))
+        ]
+        
+        return CircuitGraph(
+            circuit_id=circuit_id,
+            page_number=page_number,
+            image_path=image_path,
+            bounding_box=bounding_box,
+            components=components,
+            connections=connections,
+            metadata=circuit_info.get('metadata', {})
+        )
+
+
+class CircuitPDFProcessor:
+    """Main processor combining OpenCV extraction and MLM analysis"""
+    
+    def __init__(self, anthropic_api_key: str, output_dir: str = "extracted_circuits"):
+        self.extractor = CircuitImageExtractor(output_dir)
+        self.analyzer = MultimodalCircuitAnalyzer(anthropic_api_key)
+        self.circuits = []
+        self.text_chunks = []
+    
+    def process_pdf(self, pdf_path: str) -> List[CircuitGraph]:
+        """Process PDF: extract images and analyze with MLM"""
+        print(f"Extracting circuit images from {pdf_path}...")
+        extracted_circuits = self.extractor.extract_circuit_images(pdf_path)
+        print(f"Found {len(extracted_circuits)} potential circuit regions")
+        
+        circuits = []
+        for circuit_data in extracted_circuits:
+            print(f"Analyzing {circuit_data['circuit_id']}...")
+            
+            # Analyze with multimodal LLM
+            analysis = self.analyzer.analyze_circuit_image(
+                circuit_data['image'],
+                circuit_data['circuit_id']
+            )
+            
+            # Create graph structure
+            circuit_graph = self.analyzer.create_circuit_graph(
+                analysis,
+                circuit_data['circuit_id'],
+                circuit_data['page_number'],
+                circuit_data['image_path'],
+                circuit_data['bounding_box']
+            )
+            
+            circuits.append(circuit_graph)
+        
+        self.circuits = circuits
+        self._build_text_chunks()
+        print(f"Successfully processed {len(circuits)} circuits")
+        return circuits
+    
+    def _build_text_chunks(self):
+        """Build searchable text chunks from circuits"""
+        self.text_chunks = [circuit.to_text_chunk() for circuit in self.circuits]
+    
+    def save_circuits_to_json(self, output_path: str):
+        """Save all circuits to JSON file"""
+        circuits_data = [circuit.to_dict() for circuit in self.circuits]
+        with open(output_path, 'w', encoding='utf-8') as f:
+            json.dump(circuits_data, f, indent=2, ensure_ascii=False)
+        print(f"Saved circuits to {output_path}")
+    
+    def load_circuits_from_json(self, json_path: str):
+        """Load circuits from JSON file"""
+        with open(json_path, 'r', encoding='utf-8') as f:
+            circuits_data = json.load(f)
+        
+        self.circuits = []
+        for data in circuits_data:
+            components = [Component(**c) for c in data['components']]
+            connections = [Connection(**c) for c in data['connections']]
+            circuit = CircuitGraph(
+                circuit_id=data['circuit_id'],
+                page_number=data['page_number'],
+                image_path=data['image_path'],
+                bounding_box=data['bounding_box'],
+                components=components,
+                connections=connections,
+                metadata=data['metadata']
+            )
+            self.circuits.append(circuit)
+        
+        self._build_text_chunks()
+
+
+class CircuitRetriever:
+    """Retrieves relevant circuit sections based on user queries"""
+    
+    def __init__(self, processor: CircuitPDFProcessor):
+        self.processor = processor
+        self.vectorizer = TfidfVectorizer(stop_words='english', ngram_range=(1, 2))
+        self.tfidf_matrix = None
+        self._build_index()
+    
+    def _build_index(self):
+        """Build TF-IDF index for retrieval"""
+        if self.processor.text_chunks:
+            self.tfidf_matrix = self.vectorizer.fit_transform(self.processor.text_chunks)
+    
+    def retrieve(self, query: str, top_k: int = 3) -> List[Tuple[CircuitGraph, float]]:
+        """Retrieve most relevant circuits for a query"""
+        if not self.tfidf_matrix or not self.processor.circuits:
+            return []
+        
+        query_vector = self.vectorizer.transform([query])
+        similarities = cosine_similarity(query_vector, self.tfidf_matrix)[0]
+        
+        top_indices = np.argsort(similarities)[-top_k:][::-1]
+        
+        results = [
+            (self.processor.circuits[idx], float(similarities[idx]))
+            for idx in top_indices
+            if similarities[idx] > 0
+        ]
+        
+        return results
+    
+    def retrieve_by_component(self, component_type: str, top_k: int = 5) -> List[CircuitGraph]:
+        """Retrieve circuits containing specific component type"""
+        matching = []
+        for circuit in self.processor.circuits:
+            if any(component_type.lower() in comp.type.lower() for comp in circuit.components):
+                matching.append(circuit)
+        return matching[:top_k]
+    
+    def answer_query(self, query: str) -> Dict[str, Any]:
+        """Answer a query and return detailed circuit information"""
+        results = self.retrieve(query, top_k=3)
+        
+        if not results:
+            return {
+                "answer": "No relevant circuit information found for your query.",
+                "circuits": []
+            }
+        
+        response = {
+            "answer": f"Found {len(results)} relevant circuit(s)",
+            "circuits": []
+        }
+        
+        for circuit, score in results:
+            # Find matching components
+            query_terms = query.lower().split()
+            matching_comps = [
+                {
+                    'id': c.id,
+                    'type': c.type,
+                    'value': c.value,
+                    'properties': c.properties
+                }
+                for c in circuit.components
+                if any(term in c.type.lower() or term in c.id.lower() or term in c.value.lower() 
+                       for term in query_terms)
+            ]
+            
+            circuit_info = {
+                'circuit_id': circuit.circuit_id,
+                'page_number': circuit.page_number,
+                'image_path': circuit.image_path,
+                'relevance_score': round(score, 3),
+                'total_components': len(circuit.components),
+                'total_connections': len(circuit.connections),
+                'matching_components': matching_comps,
+                'description': circuit.metadata.get('description', ''),
+                'graph_data': circuit.to_dict()
+            }
+            
+            response['circuits'].append(circuit_info)
+        
+        return response
+
+
+# Example usage
+def main():
+    # Initialize with your Anthropic API key
+    API_KEY = "your-anthropic-api-key-here"
+    
+    # Process PDF
+    processor = CircuitPDFProcessor(API_KEY)
+    circuits = processor.process_pdf("circuit_diagrams.pdf")
+    
+    # Save to JSON
+    processor.save_circuits_to_json("circuits_graph.json")
+    
+    # Initialize retriever
+    retriever = CircuitRetriever(processor)
+    
+    # Example queries
+    queries = [
+        "Show me all resistors in the circuits",
+        "Which circuits have op-amps?",
+        "Find circuits with 10kΩ resistors",
+        "What capacitors are connected to ground?"
+    ]
+    
+    print("\n" + "="*80)
+    print("CIRCUIT QUERY SYSTEM")
+    print("="*80)
+    
+    for query in queries:
+        print(f"\nQuery: {query}")
+        print("-" * 80)
+        result = retriever.answer_query(query)
+        print(json.dumps(result, indent=2))
+
+
+if __name__ == "__main__":
+    main()
