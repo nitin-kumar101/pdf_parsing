@@ -1,0 +1,22 @@
+[
+  {
+    "image_id": "img_0001",
+    "path": "images/img_0001.jpg",
+    "original_ref": "images/page_0_image_11.jpg"
+  },
+  {
+    "image_id": "img_0002",
+    "path": "images/img_0002.jpg",
+    "original_ref": "images/page_2_equation_18.jpg"
+  },
+  {
+    "image_id": "img_0003",
+    "path": "images/img_0003.jpg",
+    "original_ref": "images/page_3_image_3.jpg"
+  },
+  {
+    "image_id": "img_0004",
+    "path": "images/img_0004.jpg",
+    "original_ref": "images/page_3_image_5.jpg"
+  }
+]

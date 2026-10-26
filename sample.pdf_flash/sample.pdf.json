@@ -1,0 +1,2499 @@
+{
+  "metadata": {
+    "file_suffix": "pdf",
+    "producer": {
+      "name": "mineru",
+      "version": "4.0.12"
+    },
+    "document": {
+      "title": "Advanced Multimodal Document Parsing Benchmark",
+      "authors": [
+        "anonymous"
+      ],
+      "subject": "unspecified",
+      "created_at": "2026-10-24T18:49:50+00:00",
+      "modified_at": "2026-10-24T18:49:50+00:00",
+      "creator_application": "anonymous",
+      "producer_application": "ReportLab PDF Library - (opensource)",
+      "page_count": 5,
+      "page_count_kind": "physical"
+    }
+  },
+  "extensions": {
+    "mineru": {
+      "tier": "flash",
+      "parse_mode": "txt"
+    },
+    "docvortex_layout": {
+      "version": 1,
+      "pages": [
+        {
+          "page_idx": 0,
+          "width_pt": 595.0,
+          "height_pt": 842.0
+        },
+        {
+          "page_idx": 1,
+          "width_pt": 595.0,
+          "height_pt": 842.0
+        },
+        {
+          "page_idx": 2,
+          "width_pt": 595.0,
+          "height_pt": 842.0
+        },
+        {
+          "page_idx": 3,
+          "width_pt": 595.0,
+          "height_pt": 842.0
+        },
+        {
+          "page_idx": 4,
+          "width_pt": 595.0,
+          "height_pt": 842.0
+        }
+      ]
+    }
+  },
+  "pages": [
+    {
+      "page_idx": 0,
+      "blocks": [
+        {
+          "type": "doc_title",
+          "index": 0,
+          "bbox": [
+            0.059,
+            0.029,
+            0.529,
+            0.055
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Advanced Multimodal Systems"
+            }
+          ],
+          "level": 1
+        },
+        {
+          "type": "text",
+          "index": 1,
+          "bbox": [
+            0.059,
+            0.068,
+            0.395,
+            0.079
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Executive overview / mixed columns / raster figure"
+            }
+          ]
+        },
+        {
+          "type": "paragraph_title",
+          "index": 2,
+          "bbox": [
+            0.061,
+            0.128,
+            0.162,
+            0.143
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "ABSTRACT"
+            }
+          ],
+          "level": 2
+        },
+        {
+          "type": "text",
+          "index": 3,
+          "bbox": [
+            0.061,
+            0.154,
+            0.59,
+            0.199
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "This five-page synthetic dossier intentionally combines difficult PDF structures: nested headers, rotated labels, embedded raster imagery, vector plots, and multi-column narratives. All measurements are illustrative rather than empirical."
+            }
+          ]
+        },
+        {
+          "type": "paragraph_title",
+          "index": 4,
+          "bbox": [
+            0.061,
+            0.248,
+            0.26,
+            0.263
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "1. Research objectives"
+            }
+          ],
+          "level": 2
+        },
+        {
+          "type": "text",
+          "index": 5,
+          "bbox": [
+            0.061,
+            0.277,
+            0.31,
+            0.324
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "The benchmark assesses document understanding across heterogeneous visual and textual modalities."
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 6,
+          "bbox": [
+            0.061,
+            0.348,
+            0.274,
+            0.431
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Primary challenges include: - Reading-order reconstruction - Table-cell association - Figure-caption grounding - Metadata preservation"
+            }
+          ]
+        },
+        {
+          "type": "paragraph_title",
+          "index": 7,
+          "bbox": [
+            0.531,
+            0.248,
+            0.742,
+            0.263
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "2. Pipeline assumptions"
+            }
+          ],
+          "level": 2
+        },
+        {
+          "type": "text",
+          "index": 8,
+          "bbox": [
+            0.531,
+            0.277,
+            0.776,
+            0.324
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Input documents may include scans, vector artwork, nested tables, and nonuniform reading directions."
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 9,
+          "bbox": [
+            0.531,
+            0.348,
+            0.72,
+            0.431
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Expected outputs: - Structured JSON records - Linked figure descriptions - Chunk-level provenance - Layout-aware Markdown"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "index": 11,
+          "bbox": [
+            0.061,
+            0.537,
+            0.939,
+            0.797
+          ],
+          "content": [
+            {
+              "type": "image_caption",
+              "index": 10,
+              "bbox": [
+                0.061,
+                0.514,
+                0.518,
+                0.527
+              ],
+              "content": [
+                {
+                  "type": "text",
+                  "content": "FIGURE 1. Embedded raster microscopy-style illustration"
+                }
+              ]
+            },
+            {
+              "type": "image_body",
+              "index": 11,
+              "bbox": [
+                0.061,
+                0.537,
+                0.939,
+                0.797
+              ],
+              "content": "",
+              "image_id": "img_0001"
+            },
+            {
+              "type": "image_caption",
+              "index": 12,
+              "bbox": [
+                0.061,
+                0.809,
+                0.498,
+                0.819
+              ],
+              "content": [
+                {
+                  "type": "text",
+                  "content": "Figure 1. Synthetic pixel image with an annotated region of interest (ROI)."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 13,
+          "bbox": [
+            0.081,
+            0.849,
+            0.555,
+            0.861
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Document properties: five distinct page layouts; searchable vector text;"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 14,
+          "bbox": [
+            0.081,
+            0.867,
+            0.55,
+            0.879
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "one true raster image; vector diagrams and quantitative visualizations."
+            }
+          ]
+        },
+        {
+          "type": "footer",
+          "index": 15,
+          "bbox": [
+            0.059,
+            0.962,
+            0.497,
+            0.971
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "SYNTHETIC RESEARCH REPORT | MULTIMODAL EXTRACTION BENCHMARK"
+            }
+          ]
+        },
+        {
+          "type": "page_number",
+          "index": 16,
+          "bbox": [
+            0.845,
+            0.961,
+            0.913,
+            0.971
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "PAGE 1 / 5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "page_idx": 1,
+      "blocks": [
+        {
+          "type": "text",
+          "index": 0,
+          "bbox": [
+            0.059,
+            0.029,
+            0.362,
+            0.055
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Experimental Matrix",
+              "styles": [
+                "bold"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 1,
+          "bbox": [
+            0.059,
+            0.068,
+            0.464,
+            0.079
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Multi-level headers / merged regions / dense numerical table"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 2,
+          "bbox": [
+            0.061,
+            0.131,
+            0.465,
+            0.147
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "TABLE 1. Hierarchical performance matrix",
+              "styles": [
+                "bold"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 3,
+          "bbox": [
+            0.074,
+            0.191,
+            0.128,
+            0.203
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Method",
+              "styles": [
+                "bold"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 4,
+          "bbox": [
+            0.261,
+            0.191,
+            0.312,
+            0.203
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Quality",
+              "styles": [
+                "bold"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 5,
+          "bbox": [
+            0.613,
+            0.191,
+            0.671,
+            0.203
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Latency",
+              "styles": [
+                "bold"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 6,
+          "bbox": [
+            0.849,
+            0.191,
+            0.882,
+            0.203
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Cost",
+              "styles": [
+                "bold"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 7,
+          "bbox": [
+            0.069,
+            0.229,
+            0.11,
+            0.239
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Parser",
+              "styles": [
+                "bold"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 8,
+          "bbox": [
+            0.254,
+            0.229,
+            0.3,
+            0.239
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Text F1",
+              "styles": [
+                "bold"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 9,
+          "bbox": [
+            0.371,
+            0.229,
+            0.425,
+            0.239
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Table F1",
+              "styles": [
+                "bold"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 10,
+          "bbox": [
+            0.489,
+            0.229,
+            0.546,
+            0.239
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Image F1",
+              "styles": [
+                "bold"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 11,
+          "bbox": [
+            0.607,
+            0.229,
+            0.653,
+            0.239
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "P50 ms",
+              "styles": [
+                "bold"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 12,
+          "bbox": [
+            0.724,
+            0.229,
+            0.77,
+            0.239
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "P95 ms",
+              "styles": [
+                "bold"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 13,
+          "bbox": [
+            0.842,
+            0.229,
+            0.888,
+            0.239
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "USD/1k",
+              "styles": [
+                "bold"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 14,
+          "bbox": [
+            0.069,
+            0.27,
+            0.129,
+            0.281
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Rule-only"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 15,
+          "bbox": [
+            0.254,
+            0.27,
+            0.282,
+            0.281
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "0.91"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 16,
+          "bbox": [
+            0.371,
+            0.27,
+            0.399,
+            0.281
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "0.62"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 17,
+          "bbox": [
+            0.489,
+            0.27,
+            0.517,
+            0.281
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "0.34"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 18,
+          "bbox": [
+            0.607,
+            0.27,
+            0.623,
+            0.281
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "82"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 19,
+          "bbox": [
+            0.724,
+            0.27,
+            0.748,
+            0.281
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "215"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 20,
+          "bbox": [
+            0.842,
+            0.27,
+            0.87,
+            0.281
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "0.08"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 21,
+          "bbox": [
+            0.069,
+            0.316,
+            0.144,
+            0.328
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "OCR hybrid"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 22,
+          "bbox": [
+            0.254,
+            0.316,
+            0.282,
+            0.328
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "0.94"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 23,
+          "bbox": [
+            0.371,
+            0.316,
+            0.399,
+            0.328
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "0.79"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 24,
+          "bbox": [
+            0.489,
+            0.316,
+            0.517,
+            0.328
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "0.61"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 25,
+          "bbox": [
+            0.607,
+            0.316,
+            0.631,
+            0.328
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "134"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 26,
+          "bbox": [
+            0.724,
+            0.316,
+            0.748,
+            0.328
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "388"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 27,
+          "bbox": [
+            0.842,
+            0.316,
+            0.87,
+            0.328
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "0.41"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 28,
+          "bbox": [
+            0.069,
+            0.363,
+            0.155,
+            0.374
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Layout model"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 29,
+          "bbox": [
+            0.254,
+            0.363,
+            0.282,
+            0.374
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "0.96"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 30,
+          "bbox": [
+            0.371,
+            0.363,
+            0.399,
+            0.374
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "0.88"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 31,
+          "bbox": [
+            0.489,
+            0.363,
+            0.517,
+            0.374
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "0.83"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 32,
+          "bbox": [
+            0.607,
+            0.363,
+            0.631,
+            0.374
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "296"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 33,
+          "bbox": [
+            0.724,
+            0.363,
+            0.748,
+            0.374
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "720"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 34,
+          "bbox": [
+            0.842,
+            0.363,
+            0.87,
+            0.374
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "0.77"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 35,
+          "bbox": [
+            0.069,
+            0.409,
+            0.155,
+            0.42
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "VLM assisted"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 36,
+          "bbox": [
+            0.254,
+            0.409,
+            0.282,
+            0.42
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "0.97"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 37,
+          "bbox": [
+            0.371,
+            0.409,
+            0.399,
+            0.42
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "0.92"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 38,
+          "bbox": [
+            0.489,
+            0.409,
+            0.517,
+            0.42
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "0.95"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 39,
+          "bbox": [
+            0.607,
+            0.409,
+            0.631,
+            0.42
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "890"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 40,
+          "bbox": [
+            0.724,
+            0.409,
+            0.756,
+            0.42
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "1810"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 41,
+          "bbox": [
+            0.842,
+            0.409,
+            0.87,
+            0.42
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "2.65"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 42,
+          "bbox": [
+            0.069,
+            0.455,
+            0.132,
+            0.467
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Ensemble"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 43,
+          "bbox": [
+            0.254,
+            0.455,
+            0.282,
+            0.467
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "0.98"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 44,
+          "bbox": [
+            0.371,
+            0.455,
+            0.399,
+            0.467
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "0.95"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 45,
+          "bbox": [
+            0.489,
+            0.455,
+            0.517,
+            0.467
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "0.96"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 46,
+          "bbox": [
+            0.607,
+            0.455,
+            0.638,
+            0.467
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "1020"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 47,
+          "bbox": [
+            0.724,
+            0.455,
+            0.756,
+            0.467
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "2300"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 48,
+          "bbox": [
+            0.842,
+            0.455,
+            0.87,
+            0.467
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "3.12"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 49,
+          "bbox": [
+            0.069,
+            0.502,
+            0.122,
+            0.513
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Fallback"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 50,
+          "bbox": [
+            0.254,
+            0.502,
+            0.282,
+            0.513
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "0.88"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 51,
+          "bbox": [
+            0.371,
+            0.502,
+            0.399,
+            0.513
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "0.57"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 52,
+          "bbox": [
+            0.489,
+            0.502,
+            0.517,
+            0.513
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "0.29"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 53,
+          "bbox": [
+            0.607,
+            0.502,
+            0.623,
+            0.513
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "64"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 54,
+          "bbox": [
+            0.724,
+            0.502,
+            0.748,
+            0.513
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "190"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 55,
+          "bbox": [
+            0.842,
+            0.502,
+            0.87,
+            0.513
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "0.05"
+            }
+          ]
+        },
+        {
+          "type": "paragraph_title",
+          "index": 56,
+          "bbox": [
+            0.061,
+            0.549,
+            0.567,
+            0.563
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "TABLE 2. Irregular cells with wrapped conceptual content"
+            }
+          ],
+          "level": 2
+        },
+        {
+          "type": "text",
+          "index": 57,
+          "bbox": [
+            0.076,
+            0.59,
+            0.191,
+            0.602
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Condition / group"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 58,
+          "bbox": [
+            0.37,
+            0.59,
+            0.485,
+            0.602
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Observed artifact"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 59,
+          "bbox": [
+            0.709,
+            0.59,
+            0.774,
+            0.602
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Mitigation"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 60,
+          "bbox": [
+            0.076,
+            0.629,
+            0.174,
+            0.64
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "A: Multi-column"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 61,
+          "bbox": [
+            0.37,
+            0.629,
+            0.527,
+            0.64
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Cross-column text jumps"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 62,
+          "bbox": [
+            0.709,
+            0.629,
+            0.8,
+            0.64
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Geometry sort"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 63,
+          "bbox": [
+            0.076,
+            0.684,
+            0.186,
+            0.696
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "B: Spanning cells"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 64,
+          "bbox": [
+            0.37,
+            0.684,
+            0.516,
+            0.696
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Header-child ambiguity"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 65,
+          "bbox": [
+            0.709,
+            0.684,
+            0.774,
+            0.696
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Cell graph"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 66,
+          "bbox": [
+            0.076,
+            0.74,
+            0.185,
+            0.752
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "C: Rotated labels"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 67,
+          "bbox": [
+            0.37,
+            0.74,
+            0.505,
+            0.752
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Orientation mismatch"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 68,
+          "bbox": [
+            0.709,
+            0.74,
+            0.789,
+            0.752
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Angle detect"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 69,
+          "bbox": [
+            0.076,
+            0.796,
+            0.203,
+            0.807
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "D: Embedded figure"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 70,
+          "bbox": [
+            0.37,
+            0.796,
+            0.482,
+            0.807
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Caption detached"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 71,
+          "bbox": [
+            0.709,
+            0.796,
+            0.799,
+            0.807
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Region linking"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 72,
+          "bbox": [
+            0.061,
+            0.862,
+            0.432,
+            0.873
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Note: All benchmark values are invented for parser evaluation."
+            }
+          ]
+        },
+        {
+          "type": "footer",
+          "index": 73,
+          "bbox": [
+            0.059,
+            0.962,
+            0.497,
+            0.971
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "SYNTHETIC RESEARCH REPORT | MULTIMODAL EXTRACTION BENCHMARK"
+            }
+          ]
+        },
+        {
+          "type": "page_number",
+          "index": 74,
+          "bbox": [
+            0.845,
+            0.961,
+            0.913,
+            0.971
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "PAGE 2 / 5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "page_idx": 2,
+      "blocks": [
+        {
+          "type": "text",
+          "index": 0,
+          "bbox": [
+            0.059,
+            0.029,
+            0.479,
+            0.055
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Architecture & Connectivity",
+              "styles": [
+                "bold"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 1,
+          "bbox": [
+            0.059,
+            0.068,
+            0.462,
+            0.079
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Vector process diagram / connectors / annotations / legends"
+            }
+          ]
+        },
+        {
+          "type": "paragraph_title",
+          "index": 2,
+          "bbox": [
+            0.061,
+            0.128,
+            0.507,
+            0.143
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "FIGURE 2. Multi-stage document processing graph"
+            }
+          ],
+          "level": 2
+        },
+        {
+          "type": "paragraph_title",
+          "index": 3,
+          "bbox": [
+            0.094,
+            0.231,
+            0.201,
+            0.246
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "PDF INPUT"
+            }
+          ],
+          "level": 2
+        },
+        {
+          "type": "text",
+          "index": 4,
+          "bbox": [
+            0.094,
+            0.262,
+            0.181,
+            0.273
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "raster + vector"
+            }
+          ]
+        },
+        {
+          "type": "paragraph_title",
+          "index": 5,
+          "bbox": [
+            0.094,
+            0.446,
+            0.195,
+            0.461
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "RETRIEVE"
+            }
+          ],
+          "level": 2
+        },
+        {
+          "type": "text",
+          "index": 6,
+          "bbox": [
+            0.094,
+            0.477,
+            0.185,
+            0.488
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "semantic query"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 7,
+          "bbox": [
+            0.395,
+            0.231,
+            0.495,
+            0.273
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "SEGMENT",
+              "styles": [
+                "bold"
+              ]
+            },
+            {
+              "type": "text",
+              "content": " layout zones"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 8,
+          "bbox": [
+            0.395,
+            0.446,
+            0.457,
+            0.461
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "INDEX",
+              "styles": [
+                "bold"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 9,
+          "bbox": [
+            0.395,
+            0.477,
+            0.476,
+            0.488
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "hybrid search"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 10,
+          "bbox": [
+            0.696,
+            0.231,
+            0.791,
+            0.273
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "EXTRACT",
+              "styles": [
+                "bold"
+              ]
+            },
+            {
+              "type": "text",
+              "content": " text / images"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 11,
+          "bbox": [
+            0.696,
+            0.446,
+            0.816,
+            0.488
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "NORMALIZE",
+              "styles": [
+                "bold"
+              ]
+            },
+            {
+              "type": "text",
+              "content": " tables / JSON"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 12,
+          "bbox": [
+            0.062,
+            0.588,
+            0.432,
+            0.603
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Vector symbols and parsing requirements",
+              "styles": [
+                "bold"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph_title",
+          "index": 13,
+          "bbox": [
+            0.076,
+            0.633,
+            0.388,
+            0.646
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "01 Directed arrows encode dependency"
+            }
+          ],
+          "level": 2
+        },
+        {
+          "type": "paragraph_title",
+          "index": 14,
+          "bbox": [
+            0.076,
+            0.68,
+            0.384,
+            0.694
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "02 Each node contains hierarchical text"
+            }
+          ],
+          "level": 2
+        },
+        {
+          "type": "paragraph_title",
+          "index": 15,
+          "bbox": [
+            0.076,
+            0.728,
+            0.434,
+            0.741
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "03 Spatial adjacency differs from reading order"
+            }
+          ],
+          "level": 2
+        },
+        {
+          "type": "text",
+          "index": 16,
+          "bbox": [
+            0.076,
+            0.775,
+            0.424,
+            0.789
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "04 Boxes and connectors are vector graphics"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 17,
+          "bbox": [
+            0.081,
+            0.873,
+            0.286,
+            0.885
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Expected structural relation:",
+              "styles": [
+                "bold"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "equation",
+          "index": 18,
+          "bbox": [
+            0.081,
+            0.893,
+            0.536,
+            0.903
+          ],
+          "content": "",
+          "image_id": "img_0002"
+        },
+        {
+          "type": "footer",
+          "index": 19,
+          "bbox": [
+            0.059,
+            0.962,
+            0.497,
+            0.971
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "SYNTHETIC RESEARCH REPORT | MULTIMODAL EXTRACTION BENCHMARK"
+            }
+          ]
+        },
+        {
+          "type": "page_number",
+          "index": 20,
+          "bbox": [
+            0.845,
+            0.961,
+            0.913,
+            0.971
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "PAGE 3 / 5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "page_idx": 3,
+      "blocks": [
+        {
+          "type": "text",
+          "index": 0,
+          "bbox": [
+            0.059,
+            0.029,
+            0.368,
+            0.055
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Quantitative Figures",
+              "styles": [
+                "bold"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 1,
+          "bbox": [
+            0.059,
+            0.068,
+            0.435,
+            0.079
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Line plot / grouped bars / axis labels / embedded legend"
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "index": 3,
+          "bbox": [
+            0.071,
+            0.187,
+            0.883,
+            0.52
+          ],
+          "content": [
+            {
+              "type": "image_caption",
+              "index": 2,
+              "bbox": [
+                0.061,
+                0.128,
+                0.62,
+                0.143
+              ],
+              "content": [
+                {
+                  "type": "text",
+                  "content": "FIGURE 3. Quality and throughput across document complexity"
+                }
+              ]
+            },
+            {
+              "type": "image_body",
+              "index": 3,
+              "bbox": [
+                0.071,
+                0.187,
+                0.883,
+                0.52
+              ],
+              "content": "100\n80\n60\n40\n20\n0\nLow        Moderate        High        Very high        Extreme\nText fidelity        Table fidelity",
+              "image_id": "img_0003"
+            },
+            {
+              "type": "image_caption",
+              "index": 4,
+              "bbox": [
+                0.061,
+                0.551,
+                0.454,
+                0.566
+              ],
+              "content": [
+                {
+                  "type": "text",
+                  "content": "FIGURE 4. Processing time by pipeline stage"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "image",
+          "index": 5,
+          "bbox": [
+            0.118,
+            0.672,
+            0.863,
+            0.869
+          ],
+          "content": [
+            {
+              "type": "image_body",
+              "index": 5,
+              "bbox": [
+                0.118,
+                0.672,
+                0.863,
+                0.869
+              ],
+              "content": "Detection        OCR        Parsing        Embedding\nStandard        Complex layout",
+              "image_id": "img_0004"
+            },
+            {
+              "type": "image_caption",
+              "index": 6,
+              "bbox": [
+                0.061,
+                0.894,
+                0.555,
+                0.905
+              ],
+              "content": [
+                {
+                  "type": "text",
+                  "content": "Figure 3-4. Synthetic values. Vector-drawn plots are intentionally not bitmap charts."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "footer",
+          "index": 7,
+          "bbox": [
+            0.059,
+            0.962,
+            0.497,
+            0.971
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "SYNTHETIC RESEARCH REPORT | MULTIMODAL EXTRACTION BENCHMARK"
+            }
+          ]
+        },
+        {
+          "type": "page_number",
+          "index": 8,
+          "bbox": [
+            0.845,
+            0.961,
+            0.913,
+            0.971
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "PAGE 4 / 5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "page_idx": 4,
+      "blocks": [
+        {
+          "type": "text",
+          "index": 0,
+          "bbox": [
+            0.059,
+            0.029,
+            0.527,
+            0.079
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Appendix: Edge Cases",
+              "styles": [
+                "bold"
+              ]
+            },
+            {
+              "type": "text",
+              "content": " Rotated text / two-column reading order / checklist / mixed typography"
+            }
+          ]
+        },
+        {
+          "type": "paragraph_title",
+          "index": 1,
+          "bbox": [
+            0.061,
+            0.134,
+            0.35,
+            0.149
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "A. Extraction validation checklist"
+            }
+          ],
+          "level": 2
+        },
+        {
+          "type": "text",
+          "index": 2,
+          "bbox": [
+            0.104,
+            0.176,
+            0.515,
+            0.187
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Detect merged header cells and infer parent-child relationships"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 3,
+          "bbox": [
+            0.104,
+            0.217,
+            0.482,
+            0.229
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Preserve table column order, units, and numeric precision"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 4,
+          "bbox": [
+            0.104,
+            0.259,
+            0.473,
+            0.271
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Associate captions with nearby figures and raster assets"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 5,
+          "bbox": [
+            0.104,
+            0.301,
+            0.491,
+            0.312
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Recover multi-column paragraphs without interleaving lines"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 6,
+          "bbox": [
+            0.104,
+            0.342,
+            0.479,
+            0.354
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Capture arrows and nodes as a structured directed graph"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 7,
+          "bbox": [
+            0.104,
+            0.384,
+            0.498,
+            0.395
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Retain page number, bounding box, and source provenance"
+            }
+          ]
+        },
+        {
+          "type": "paragraph_title",
+          "index": 8,
+          "bbox": [
+            0.061,
+            0.455,
+            0.409,
+            0.47
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "B. Rotated annotation and dense layout"
+            }
+          ],
+          "level": 2
+        },
+        {
+          "type": "aside_text",
+          "index": 9,
+          "bbox": [
+            0.085,
+            0.492,
+            0.096,
+            0.684
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "ROTATED SIDE LABEL / 90 DEGREES"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 10,
+          "bbox": [
+            0.171,
+            0.521,
+            0.386,
+            0.609
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Column A - embedded narrative A layout-aware parser should retain this contiguous block despite nearby orthogonal text and graphics."
+            }
+          ]
+        },
+        {
+          "type": "paragraph_title",
+          "index": 11,
+          "bbox": [
+            0.061,
+            0.732,
+            0.319,
+            0.746
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "C. Structured output example"
+            }
+          ],
+          "level": 2
+        },
+        {
+          "type": "text",
+          "index": 12,
+          "bbox": [
+            0.082,
+            0.773,
+            0.091,
+            0.785
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "{"
+            }
+          ]
+        },
+        {
+          "type": "paragraph_title",
+          "index": 13,
+          "bbox": [
+            0.101,
+            0.79,
+            0.409,
+            0.802
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "\"page\": 5, \"type\": \"mixed_layout\","
+            }
+          ],
+          "level": 2
+        },
+        {
+          "type": "text",
+          "index": 14,
+          "bbox": [
+            0.566,
+            0.521,
+            0.739,
+            0.609
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "Column B - metadata Document ID: DEMO-005 Revision: 2.1 (synthetic) Confidence: 0.973 Reading order: A then B"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 15,
+          "bbox": [
+            0.101,
+            0.808,
+            0.582,
+            0.82
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "\"regions\": [\"checklist\", \"rotated_label\", \"columns\"],"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 16,
+          "bbox": [
+            0.101,
+            0.826,
+            0.427,
+            0.856
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "\"table_count\": 0, \"figure_count\": 0, \"requires_geometry\": true"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "index": 17,
+          "bbox": [
+            0.082,
+            0.862,
+            0.091,
+            0.874
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "}"
+            }
+          ]
+        },
+        {
+          "type": "footer",
+          "index": 18,
+          "bbox": [
+            0.059,
+            0.962,
+            0.497,
+            0.971
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "SYNTHETIC RESEARCH REPORT | MULTIMODAL EXTRACTION BENCHMARK"
+            }
+          ]
+        },
+        {
+          "type": "page_number",
+          "index": 19,
+          "bbox": [
+            0.845,
+            0.961,
+            0.913,
+            0.971
+          ],
+          "content": [
+            {
+              "type": "text",
+              "content": "PAGE 5 / 5"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "is_full_document": true,
+  "schema": "docvortex.middle",
+  "schema_version": "2.0",
+  "images": [
+    {
+      "image_id": "img_0001",
+      "path": "images/img_0001.jpg",
+      "original_ref": "images/page_0_image_11.jpg"
+    },
+    {
+      "image_id": "img_0002",
+      "path": "images/img_0002.jpg",
+      "original_ref": "images/page_2_equation_18.jpg"
+    },
+    {
+      "image_id": "img_0003",
+      "path": "images/img_0003.jpg",
+      "original_ref": "images/page_3_image_3.jpg"
+    },
+    {
+      "image_id": "img_0004",
+      "path": "images/img_0004.jpg",
+      "original_ref": "images/page_3_image_5.jpg"
+    }
+  ]
+}
